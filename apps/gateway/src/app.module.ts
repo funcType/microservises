@@ -1,10 +1,56 @@
-import { Module } from '@nestjs/common';
+import { ApolloGatewayDriver, ApolloGatewayDriverConfig } from '@nestjs/apollo';
+import { Module, MiddlewareConsumer } from '@nestjs/common';
+import { GraphQLModule } from '@nestjs/graphql';
+import { IntrospectAndCompose, RemoteGraphQLDataSource } from '@apollo/gateway';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { authContext } from './auth.context';
+import * as cors from 'cors';
 
 @Module({
-  imports: [],
+  imports: [
+    GraphQLModule.forRoot<ApolloGatewayDriverConfig>({
+      driver: ApolloGatewayDriver,
+      server: {
+        context: authContext,
+      },
+      gateway: {
+        supergraphSdl: new IntrospectAndCompose({
+          subgraphs: [
+            {
+              name: 'users',
+              url: 'http://localhost:3000/graphql',
+            },
+            {
+              name: 'posts',
+              url: 'http://localhost:3001/graphql',
+            },
+          ],
+        }),
+        buildService({ url }) {
+          return new RemoteGraphQLDataSource({
+            url,
+            willSendRequest({ request, context }) {
+              try {
+                console.log('Setting user header:', context.user);
+                request.http.headers.set(
+                  'user',
+                  context.user ? JSON.stringify(context.user) : null,
+                );
+              } catch (error) {
+                console.error('Will Send Request Error:', error);
+              }
+            },
+          });
+        },
+      },
+    }),
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(cors()).forRoutes('*');
+  }
+}
