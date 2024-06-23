@@ -12,11 +12,11 @@ export class UsersService {
   }
 
   findAll() {
-    return `This action returns all users`;
+    return this.users;
   }
 
   findOne(id: string) {
-    return `This action returns a #${id} user`;
+    return this.users.find((user) => user.id === id);
   }
 
 
