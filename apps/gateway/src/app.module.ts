@@ -31,15 +31,10 @@ import * as cors from 'cors';
           return new RemoteGraphQLDataSource({
             url,
             willSendRequest({ request, context }) {
-              try {
-                console.log('Setting user header:', context.user);
-                request.http.headers.set(
-                  'user',
-                  context.user ? JSON.stringify(context.user) : null,
-                );
-              } catch (error) {
-                console.error('Will Send Request Error:', error);
-              }
+              request.http.headers.set(
+                'user',
+                context.user ? JSON.stringify(context.user) : null,
+              );
             },
           });
         },

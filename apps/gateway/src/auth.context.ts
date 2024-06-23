@@ -1,6 +1,9 @@
-export const authContext = ({ req }) => {
-  console.log('Authorization Header:', req.headers?.authorization);
+import { UnauthorizedException } from '@nestjs/common';
 
-  // Bypass authorization for development purposes
-  return { user: { id: '123' } };
+export const authContext = ({ req }) => {
+  if (req.headers?.authorization) {
+
+    return { user: { id: '123' } };
+  }
+  throw new UnauthorizedException();
 };
