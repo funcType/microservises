@@ -1,6 +1,8 @@
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+[Nest](https://github.com/nestjs/nest) 
+
+This project sets up a NestJS application with multiple microservices (users and posts), a gateway for managing these services, and a MongoDB database for storing data. The project also includes a React frontend application that interacts with the GraphQL API provided by the NestJS application. You can create, view, and manage user records through the GraphQL API and view the data in the frontend application.
 
 ## Installation
 
