@@ -8,25 +8,24 @@ export class UsersResolver {
   constructor(private readonly usersService: UsersService) { }
 
   @Mutation(() => User)
-  createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
+  async createUser(@Args('createUserInput') createUserInput: CreateUserInput): Promise<User> {
     return this.usersService.create(createUserInput);
   }
 
   @Query(() => [User], { name: 'users' })
-  findAll() {
+  async findAll(): Promise<User[]> {
     return this.usersService.findAll();
   }
 
   @Query(() => User, { name: 'user' })
-  findOne(@Args('id') id: string) {
+  async findOne(@Args('id') id: string): Promise<User> {
     return this.usersService.findOne(id);
   }
 
   @ResolveReference()
-  resolveReference(reference: { __typename: string; id: string }): User {
+  async resolveReference(reference: { __typename: string; id: string }): Promise<User> {
     return this.usersService.findOne(reference.id);
   }
-
-
 }
+
 

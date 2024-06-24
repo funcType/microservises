@@ -1,17 +1,18 @@
+import { Entity, ObjectIdColumn, Column, ObjectId } from 'typeorm';
 import { ObjectType, Field, ID } from '@nestjs/graphql';
-import { User } from './user.entity';
 
 @ObjectType()
+@Entity()
 export class Post {
   @Field(() => ID)
-  id: string;
+  @ObjectIdColumn()
+  id: ObjectId;
 
   @Field()
+  @Column()
   body: string;
 
   @Field()
+  @Column()
   authorId: string;
-
-  @Field(() => User)
-  user?: User;
 }
