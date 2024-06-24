@@ -49,6 +49,8 @@ In the HTTP headers, specify the following:
 
 6. Add a User Record
 Use the following mutation to add a user:
+```bash
+
 
 mutation {
   createUser(createUserInput: {
@@ -61,6 +63,9 @@ mutation {
     password
   }
 }
+
+```
+
 
 Execute the query and check the record in the nest database using MongoDB Compass.
 
